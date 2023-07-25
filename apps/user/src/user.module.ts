@@ -5,6 +5,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
 import { UserEntity } from './domain/entities/user.entity';
+import { UserSaveUC } from './application/use_case/user-save-uc';
+import { UserListUC } from './application/use_case/user-list-uc';
+import { UserViewUC } from './application/use_case/user-view-uc';
+import { UserUpdateUC } from './application/use_case/user-update-uc';
+import { UserDeleteUC } from './application/use_case/user-delete-uc';
 
 @Module({
   imports: [
@@ -21,12 +26,19 @@ import { UserEntity } from './domain/entities/user.entity';
         entities: [UserEntity],
         synchronize: true,
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     ScheduleModule.forRoot(),
-    UserEntity
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [
+    UserService,
+    UserSaveUC,
+    UserListUC,
+    UserViewUC,
+    UserUpdateUC,
+    UserDeleteUC,
+  ],
 })
 export class UserModule {}
