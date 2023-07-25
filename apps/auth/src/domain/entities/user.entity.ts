@@ -54,13 +54,17 @@ export class UserEntity {
 
   @BeforeInsert()
   async setPass(pass: string): Promise<UserEntity> {
-    const salt = await bcrypt.genSalt();
-    this.pass = await bcrypt.hash(pass || this.pass, salt);
+    this.pass = await bcrypt.hash(pass || this.pass);
     return this;
   }
 
   async checkPass(pass: string): Promise<boolean> {
-    return await bcrypt.compare(pass, this.pass);
+    const auth = await bcrypt.compareSync(pass, this.pass);
+    await bcrypt.compareSync(pass, this.pass, function(err, result) {
+      if (err) { throw (err); }
+      console.log(result);
+  });
+    return(!!auth)
   }
 
   public changeStatus(status: UserStatusEnum): UserEntity {

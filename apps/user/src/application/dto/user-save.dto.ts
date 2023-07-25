@@ -30,6 +30,5 @@ export class UserSavaDto {
   @IsString()
   @MinLength(8)
   @MaxLength(20)
-  @Matches('password')
   public pass_confirmation: string;
 }
