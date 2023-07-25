@@ -24,7 +24,7 @@ export class UserAuthUC {
       throw new HttpException('Usuário inválido', HttpStatus.BAD_REQUEST);
     }
 
-    if (user.checkEmail !== null) {
+    if (user.verification !== null) {
       throw new HttpException('Email não confirmado', HttpStatus.BAD_REQUEST);
     }
 

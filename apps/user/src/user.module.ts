@@ -12,6 +12,7 @@ import { UserUpdateUC } from './application/use_case/user-update-uc';
 import { UserDeleteUC } from './application/use_case/user-delete-uc';
 import { UserRecoveryPassUC } from './application/use_case/user-recovery-pass-uc';
 import { LoggerMiddleware } from './infraestructure/middleware/logger.middleware';
+import { UserGetRecoveryCodeUC } from './application/use_case/user-get-code-uc';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { LoggerMiddleware } from './infraestructure/middleware/logger.middleware
     UserUpdateUC,
     UserDeleteUC,
     UserRecoveryPassUC,
+    UserGetRecoveryCodeUC,
   ],
 })
 export class UserModule { 

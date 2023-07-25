@@ -24,14 +24,14 @@ export class UserAuthUC {
     if (user.status !== UserStatusEnum.ACTIVE) {
       throw new HttpException('Usuário não está ativo', HttpStatus.BAD_REQUEST);
     }
-    
+
     const auth = await user.checkPass(pass)
     console.log(auth)
     if (!auth) {
       throw new HttpException('Usuário inválido', HttpStatus.BAD_REQUEST);
     }
 
-    if (user.checkEmail !== null) {
+    if (user.verification !== null) {
       throw new HttpException('Email não confirmado', HttpStatus.BAD_REQUEST);
     }
 

@@ -18,6 +18,8 @@ import { UserUpdateDto } from './application/dto/user-update.dto';
 import { UserIdDto } from './application/dto/user-id.dto';
 import { UserRecoveryPassUC } from './application/use_case/user-recovery-pass-uc';
 import { UserRecoveryPassDto } from './application/dto/user-recovery-pass.dto';
+import { UserGetRecoveryCodeDto } from './application/dto/user-get-recovery-code.dto';
+import { UserGetRecoveryCodeUC } from './application/use_case/user-get-code-uc';
 
 @Controller('users')
 export class UserController {
@@ -27,7 +29,8 @@ export class UserController {
     private readonly userDeleteUc: UserDeleteUC,
     private readonly userViewUc: UserViewUC,
     private readonly userUpdateUc: UserUpdateUC,
-    private readonly userRecoveryPass: UserRecoveryPassUC
+    private readonly userRecoveryPass: UserRecoveryPassUC,
+    private readonly userGetRecoveryCodeUC: UserGetRecoveryCodeUC
   ) {}
 
   @Get()
@@ -58,6 +61,12 @@ export class UserController {
   @Post('/recovery-pass')
   async recoveryPass(@Body() input: UserRecoveryPassDto): Promise<boolean> {
     return this.userRecoveryPass.execute(input)
+  }
+
+  @Post('/verification-code')
+  async verificationCode(@Body() input: UserGetRecoveryCodeDto){
+    console.log('???????',input)
+    return await this.userGetRecoveryCodeUC.execute(input);
   }
 
 }

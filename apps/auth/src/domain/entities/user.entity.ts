@@ -32,7 +32,7 @@ export class UserEntity {
 
   @Column({ nullable: true })
   @Generated('uuid')
-  checkEmail: string;
+  verification: string;
 
   @Column({
     type: 'enum',
@@ -88,9 +88,9 @@ export class UserEntity {
   }
 
   public emailConfirm(code: string): void {
-    if (this.checkEmail === code) {
+    if (this.verification === code) {
       this.status = UserStatusEnum.ACTIVE;
-      this.checkEmail = null;
+      this.verification = null;
     }
     throw new HttpException('Código inválido', HttpStatus.BAD_REQUEST);
   }

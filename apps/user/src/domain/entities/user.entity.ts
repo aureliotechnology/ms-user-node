@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import {v4 as uuidv4} from 'uuid';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -32,7 +33,7 @@ export class UserEntity {
 
   @Column({ nullable: true })
   @Generated('uuid')
-  checkEmail: string;
+  verification: string;
 
   @Column({
     type: 'enum',
@@ -83,11 +84,17 @@ export class UserEntity {
     return this;
   }
 
+  public setNewCode() {
+      this.verification = uuidv4();
+  }
+
   public emailConfirm(code: string): void {
-    if (this.checkEmail === code) {
+    if (this.verification === code) {
       this.status = UserStatusEnum.ACTIVE;
-      this.checkEmail = null;
+      this.verification = null;
     }
     throw new HttpException('Código inválido', HttpStatus.BAD_REQUEST);
   }
 }
+
+

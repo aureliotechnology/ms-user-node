@@ -17,9 +17,9 @@ export class UserRecoveryPassUC {
     if (!userCurrent)
       throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
 
-    if(userCurrent.checkEmail !== input.code)
+    if(userCurrent.verification !== input.code)
       throw new HttpException('Código inválido', HttpStatus.BAD_REQUEST);
-      
+
     userCurrent.setPass(input.pass);
     const user = await this.userRepository.update(userCurrent.id, userCurrent);
 
