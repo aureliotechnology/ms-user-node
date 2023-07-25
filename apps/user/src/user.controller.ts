@@ -16,6 +16,8 @@ import { UserViewUC } from './application/use_case/user-view-uc';
 import { UserUpdateUC } from './application/use_case/user-update-uc';
 import { UserUpdateDto } from './application/dto/user-update.dto';
 import { UserIdDto } from './application/dto/user-id.dto';
+import { UserRecoveryPassUC } from './application/use_case/user-recovery-pass-uc';
+import { UserRecoveryPassDto } from './application/dto/user-recovery-pass.dto';
 
 @Controller('users')
 export class UserController {
@@ -25,6 +27,7 @@ export class UserController {
     private readonly userDeleteUc: UserDeleteUC,
     private readonly userViewUc: UserViewUC,
     private readonly userUpdateUc: UserUpdateUC,
+    private readonly userRecoveryPass: UserRecoveryPassUC
   ) {}
 
   @Get()
@@ -51,4 +54,10 @@ export class UserController {
   async delete(@Param('id') data: UserIdDto) {
     return this.userDeleteUc.execute(data.id);
   }
+
+  @Post('/recovery-pass')
+  async recoveryPass(@Body() input: UserRecoveryPassDto): Promise<boolean> {
+    return this.userRecoveryPass.execute(input)
+  }
+
 }

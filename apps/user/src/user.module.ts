@@ -10,6 +10,8 @@ import { UserListUC } from './application/use_case/user-list-uc';
 import { UserViewUC } from './application/use_case/user-view-uc';
 import { UserUpdateUC } from './application/use_case/user-update-uc';
 import { UserDeleteUC } from './application/use_case/user-delete-uc';
+import { UserRecoveryPassUC } from './application/use_case/user-recovery-pass-uc';
+import { LoggerMiddleware } from './infraestructure/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -39,6 +41,13 @@ import { UserDeleteUC } from './application/use_case/user-delete-uc';
     UserViewUC,
     UserUpdateUC,
     UserDeleteUC,
+    UserRecoveryPassUC,
   ],
 })
-export class UserModule {}
+export class UserModule { 
+  // configure(consumer) {
+  //   consumer
+  //   .apply(LoggerMiddleware)
+  //   .forRoutes(UserController);
+  // }
+}
