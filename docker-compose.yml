@@ -1,0 +1,50 @@
+version: '3.5'
+
+services:
+  user:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+    command: npm run start:dev
+    ports:
+      - 3000:3000
+  auth:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+    command: npm run start:dev auth
+    ports:
+      - 3001:3001
+  logger:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+    command: npm run start:dev logger
+    ports:
+      - 3002:3002
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+       - ./source/db:/data/postgres
+    ports:
+      - "5432:5432"

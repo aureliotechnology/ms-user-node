@@ -27,6 +27,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/auth/tsconfig.app.json"
       }
+    },
+    "logger": {
+      "type": "application",
+      "root": "apps/logger",
+      "entryFile": "main",
+      "sourceRoot": "apps/logger/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/logger/tsconfig.app.json"
+      }
     }
   }
 }

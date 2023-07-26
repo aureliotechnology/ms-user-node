@@ -20,6 +20,8 @@ import { UserRecoveryPassUC } from './application/use_case/user-recovery-pass-uc
 import { UserRecoveryPassDto } from './application/dto/user-recovery-pass.dto';
 import { UserGetRecoveryCodeDto } from './application/dto/user-get-recovery-code.dto';
 import { UserGetRecoveryCodeUC } from './application/use_case/user-get-code-uc';
+import { UserConfirmationUC } from './application/use_case/user-confirmation-uc';
+import { UserConfirmationCodeDto } from './application/dto/user-confirmation-code.dto';
 
 @Controller('users')
 export class UserController {
@@ -30,7 +32,8 @@ export class UserController {
     private readonly userViewUc: UserViewUC,
     private readonly userUpdateUc: UserUpdateUC,
     private readonly userRecoveryPass: UserRecoveryPassUC,
-    private readonly userGetRecoveryCodeUC: UserGetRecoveryCodeUC
+    private readonly userGetRecoveryCodeUC: UserGetRecoveryCodeUC,
+    private readonly userConfirmationUC: UserConfirmationUC
   ) {}
 
   @Get()
@@ -64,9 +67,15 @@ export class UserController {
   }
 
   @Post('/verification-code')
-  async verificationCode(@Body() input: UserGetRecoveryCodeDto){
-    console.log('???????',input)
+  async getCode(@Body() input: UserGetRecoveryCodeDto){
+    
     return await this.userGetRecoveryCodeUC.execute(input);
+  }
+
+  @Post('/confirmation')
+  async confirmation(@Body() input: UserConfirmationCodeDto ){
+    
+    return await this.userConfirmationUC.execute(input);
   }
 
 }

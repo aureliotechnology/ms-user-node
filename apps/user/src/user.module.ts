@@ -13,6 +13,9 @@ import { UserDeleteUC } from './application/use_case/user-delete-uc';
 import { UserRecoveryPassUC } from './application/use_case/user-recovery-pass-uc';
 import { LoggerMiddleware } from './infraestructure/middleware/logger.middleware';
 import { UserGetRecoveryCodeUC } from './application/use_case/user-get-code-uc';
+import { HttpModule } from '@nestjs/axios';
+import { AwsSesAdapter } from './infraestructure/mail/aws.ses.adapter';
+import { UserConfirmationUC } from './application/use_case/user-confirmation-uc';
 
 @Module({
   imports: [
@@ -33,6 +36,7 @@ import { UserGetRecoveryCodeUC } from './application/use_case/user-get-code-uc';
     }),
     ScheduleModule.forRoot(),
     TypeOrmModule.forFeature([UserEntity]),
+    HttpModule
   ],
   controllers: [UserController],
   providers: [
@@ -44,12 +48,14 @@ import { UserGetRecoveryCodeUC } from './application/use_case/user-get-code-uc';
     UserDeleteUC,
     UserRecoveryPassUC,
     UserGetRecoveryCodeUC,
+    UserConfirmationUC,
+    { provide: 'IMailAdapter', useClass: AwsSesAdapter },
   ],
 })
 export class UserModule { 
-  // configure(consumer) {
-  //   consumer
-  //   .apply(LoggerMiddleware)
-  //   .forRoutes(UserController);
-  // }
+  configure(consumer) {
+    consumer
+    .apply(LoggerMiddleware)
+    .forRoutes(UserController);
+  }
 }

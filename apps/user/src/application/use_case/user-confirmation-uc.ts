@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../../domain/entities/user.entity';
+import { UserConfirmationCodeDto } from '../dto/user-confirmation-code.dto';
 
 @Injectable()
 export class UserConfirmationUC {
@@ -10,12 +11,14 @@ export class UserConfirmationUC {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async execute(email: string, code: string): Promise<boolean> {
+  async execute(data: UserConfirmationCodeDto): Promise<boolean> {
     const user = await this.userRepository.findOneBy({
-      email: email,
+      email: data.email,
     });
 
-    user.emailConfirm(code);
+    if(!user.emailConfirm(data.code)){
+      throw new HttpException('Código inválido', HttpStatus.BAD_REQUEST);
+    }
     const userUpdate = await this.userRepository.update(user.id, user);
     return userUpdate.affected > 0 ?? false;
   }

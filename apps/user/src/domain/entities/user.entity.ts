@@ -88,12 +88,13 @@ export class UserEntity {
       this.verification = uuidv4();
   }
 
-  public emailConfirm(code: string): void {
+  public emailConfirm(code: string): boolean {
     if (this.verification === code) {
       this.status = UserStatusEnum.ACTIVE;
       this.verification = null;
+      return true;
     }
-    throw new HttpException('Código inválido', HttpStatus.BAD_REQUEST);
+    return false;
   }
 }
 
