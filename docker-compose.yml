@@ -9,10 +9,12 @@ services:
     volumes:
       - .:/usr/src/app
     env_file:
-      - .env
+    - .env
     command: npm run start:dev
     ports:
       - 3000:3000
+    depends_on:
+      - postgres
   auth:
     build:
       dockerfile: Dockerfile
@@ -21,10 +23,12 @@ services:
     volumes:
       - .:/usr/src/app
     env_file:
-      - .env
+    - .env
     command: npm run start:dev auth
     ports:
       - 3001:3001
+    depends_on:
+      - postgres
   logger:
     build:
       dockerfile: Dockerfile
@@ -33,10 +37,12 @@ services:
     volumes:
       - .:/usr/src/app
     env_file:
-      - .env
+    - .env
     command: npm run start:dev logger
     ports:
       - 3002:3002
+    depends_on:
+      - postgres
   postgres:
     container_name: postgres_container
     image: postgres
@@ -44,7 +50,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       PGDATA: /data/postgres
-    volumes:
-       - ./source/db:/data/postgres
+    volumes: 
+        - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+        - ./source/db:/data/postgres
     ports:
       - "5432:5432"

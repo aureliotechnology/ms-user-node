@@ -16,9 +16,13 @@ export class UserSaveUC {
   ) {}
 
   async execute(input: UserSavaDto): Promise<UserEntity> {
+    if(input.pass !== input.pass_confirmation) {
+      throw new HttpException('Senha e confirmação de senha incorretos', HttpStatus.BAD_REQUEST);
+    }
+
     const user = new UserEntity();
-    await user.setPass(input.pass);
     user
+      .setPass(input.pass)
       .changeName(input.name)
       .changeEmail(input.email)
       .changePhone(input.phone);
@@ -37,6 +41,7 @@ export class UserSaveUC {
       if(error.code === '23505') {
         throw new HttpException('Usuário já cadastrado', HttpStatus.BAD_REQUEST);
       }
+      console.log(error)
       throw new HttpException('Erro ao salvar as informações', HttpStatus.BAD_REQUEST);
     }
   }

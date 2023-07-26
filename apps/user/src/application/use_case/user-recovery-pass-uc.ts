@@ -12,6 +12,11 @@ export class UserRecoveryPassUC {
   ) {}
 
   async execute(input: UserRecoveryPassDto): Promise<boolean> {
+    
+    if(input.pass !== input.pass_confirmation) {
+      throw new HttpException('Senha e confirmação de senha incorretos', HttpStatus.BAD_REQUEST);
+    }
+
     const userCurrent = await this.userRepository.findOneBy({ email: input.email });
 
     if (!userCurrent)

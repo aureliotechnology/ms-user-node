@@ -10,8 +10,7 @@ import {
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
-import * as bcrypt from 'bcrypt';
-import { HttpException, HttpStatus } from '@nestjs/common';
+
 import {v4 as uuidv4} from 'uuid';
 
 @Entity({ name: 'user' })
@@ -53,15 +52,16 @@ export class UserEntity {
   @VersionColumn()
   version: number;
 
-  @BeforeInsert()
-  async setPass(pass: string): Promise<UserEntity> {
-    const salt = await bcrypt.genSalt();
-    this.pass = await bcrypt.hash(pass || this.pass, salt);
+  setPass(pass: string): UserEntity {
+    this.pass = pass;
     return this;
   }
 
-  async checkPass(pass: string): Promise<boolean> {
-    return await bcrypt.compare(pass, this.pass);
+  checkPass(pass: string): boolean {
+    if(this.pass === pass){
+      return true
+    }
+    return false
   }
 
   public changeStatus(status: UserStatusEnum): UserEntity {

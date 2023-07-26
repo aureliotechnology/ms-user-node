@@ -12,11 +12,10 @@ export class UserAuthUC {
   ) {}
 
   async execute(email: string, pass: string): Promise<UserEntity> {
-    console.log(email)
-    console.log(pass)
     const user = await this.userRepository.findOneBy({
       email: email,
     });
+
     if (!user) {
       throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
     }
@@ -25,8 +24,7 @@ export class UserAuthUC {
       throw new HttpException('Usuário não está ativo', HttpStatus.BAD_REQUEST);
     }
 
-    const auth = await user.checkPass(pass)
-    console.log(auth)
+    const auth = user.checkPass(pass)
     if (!auth) {
       throw new HttpException('Usuário inválido', HttpStatus.BAD_REQUEST);
     }

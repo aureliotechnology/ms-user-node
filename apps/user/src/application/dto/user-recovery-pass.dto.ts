@@ -17,7 +17,7 @@ export class UserRecoveryPassDto {
   @IsString()
   @MinLength(8)
   @MaxLength(20)
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+  @Matches(/^(?=.[$&@#])[0-9a-zA-Z$*&@#]{8,}$/, {
     message: 'password too weak',
   })
   public pass: string;

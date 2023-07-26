@@ -16,6 +16,9 @@ export class UserConfirmationUC {
       email: data.email,
     });
 
+    if (!user)
+      throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
+
     if(!user.emailConfirm(data.code)){
       throw new HttpException('Código inválido', HttpStatus.BAD_REQUEST);
     }

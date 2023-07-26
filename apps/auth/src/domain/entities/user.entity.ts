@@ -10,8 +10,8 @@ import {
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
-import * as bcrypt from 'bcrypt';
-import { HttpException, HttpStatus } from '@nestjs/common';
+
+import {v4 as uuidv4} from 'uuid';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -52,19 +52,16 @@ export class UserEntity {
   @VersionColumn()
   version: number;
 
-  @BeforeInsert()
-  async setPass(pass: string): Promise<UserEntity> {
-    this.pass = await bcrypt.hash(pass || this.pass);
+  setPass(pass: string): UserEntity {
+    this.pass = pass;
     return this;
   }
 
-  async checkPass(pass: string): Promise<boolean> {
-    const auth = await bcrypt.compareSync(pass, this.pass);
-    await bcrypt.compareSync(pass, this.pass, function(err, result) {
-      if (err) { throw (err); }
-      console.log(result);
-  });
-    return(!!auth)
+  checkPass(pass: string): boolean {
+    if(this.pass === pass){
+      return true
+    }
+    return false
   }
 
   public changeStatus(status: UserStatusEnum): UserEntity {
@@ -87,11 +84,18 @@ export class UserEntity {
     return this;
   }
 
-  public emailConfirm(code: string): void {
+  public setNewCode() {
+      this.verification = uuidv4();
+  }
+
+  public emailConfirm(code: string): boolean {
     if (this.verification === code) {
       this.status = UserStatusEnum.ACTIVE;
       this.verification = null;
+      return true;
     }
-    throw new HttpException('Código inválido', HttpStatus.BAD_REQUEST);
+    return false;
   }
 }
+
+

@@ -12,7 +12,7 @@ export class UserSavaDto {
   public name: string;
 
   @IsString()
-  @Matches(ValidationsUtils.phoneRegex, { message: 'Invalid phone' })
+  @Matches(ValidationsUtils.phoneRegex, { message: 'Telefone inválido' })
   public phone: string;
 
   @IsString()
@@ -22,8 +22,8 @@ export class UserSavaDto {
   @IsString()
   @MinLength(8)
   @MaxLength(20)
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'password too weak',
+  @Matches(/^(?=.[$&@#])[0-9a-zA-Z$*&@#]{8,}$/, {
+    message: 'Senha inválida',
   })
   public pass: string;
 
